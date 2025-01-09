@@ -348,8 +348,22 @@ class DouyinWebCrawler:
         # 对于URL列表
         return await WebCastIdFetcher.get_all_webcast_id(urls)
 
+    # 获取搜索结果
+    async def search(self, keyword: str, offset: int = 0, count: int = 20):
+        return await self.search(keyword, offset, count)
+
     async def main(self):
         """-------------------------------------------------------handler接口列表-------------------------------------------------------"""
+
+        # 获取搜索结果
+        keyword = "dolos"
+        offset = 0
+        count = 20
+        publish_time = "0"
+        result = await self.search(keyword, offset, count, publish_time)
+        print(result)
+
+
 
         # 获取单一视频信息
         # aweme_id = "7372484719365098803"

@@ -63,7 +63,7 @@ from crawlers.tiktok.web.models import (
     PostComment,
     PostCommentReply,
     UserFans,
-    UserFollow
+    UserFollow, SearchUser
 )
 
 
@@ -95,6 +95,21 @@ class TikTokWebCrawler:
         return kwargs
 
     """-------------------------------------------------------handler接口列表-------------------------------------------------------"""
+    # 搜索接口
+    async def search(self, keyword: str, cursor: int = 0, count: int = 20):
+        # 获取TikTok的实时Cookie
+        kwargs = await self.get_tiktok_headers()
+        # 创建一个基础爬虫
+        base_crawler = BaseCrawler(proxies=kwargs["proxies"], crawler_headers=kwargs["headers"])
+        async with base_crawler as crawler:
+            # 创建一个搜索的BaseModel参数
+            params = SearchUser(keyword=keyword, count=count, offset=cursor)
+            # 生成一个搜索的带有加密参数的Endpoint
+            endpoint = BogusManager.model_2_endpoint(
+                TikTokAPIEndpoints.SEARCH, params.dict(), kwargs["headers"]["User-Agent"]
+            )
+            response = await crawler.fetch_get_json(endpoint)
+        return response
 
     # 获取单个作品数据
     async def fetch_one_video(self, itemId: str):
@@ -343,10 +358,17 @@ class TikTokWebCrawler:
     """-------------------------------------------------------main接口列表-------------------------------------------------------"""
 
     async def main(self):
-        # 获取单个作品数据
-        item_id = "7369296852669205791"
-        response = await self.fetch_one_video(item_id)
-        print(response)
+        # # 获取搜索结果
+        # keyword = "dolos"
+        # cursor = 0
+        # count = 20
+        # response = await self.search(keyword, cursor, count)
+        # print(response)
+
+        # # 获取单个作品数据
+        # item_id = "7369296852669205791"
+        # response = await self.fetch_one_video(item_id)
+        # print(response)
 
         # 获取用户的个人信息
         # secUid = "MS4wLjABAAAAfDPs6wbpBcMMb85xkvDGdyyyVAUS2YoVCT9P6WQ1bpuwEuPhL9eFtTmGvxw1lT2C"
@@ -393,7 +415,7 @@ class TikTokWebCrawler:
         # response = await self.fetch_user_mix(mixId, cursor, count)
         # print(response)
 
-        # 获取作品的评论列表
+        # # 获取作品的评论列表
         # aweme_id = "7304809083817774382"
         # cursor = 0
         # count = 20

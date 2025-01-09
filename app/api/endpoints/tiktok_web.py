@@ -15,7 +15,7 @@ TikTokWebCrawler = TikTokWebCrawler()
             response_model=ResponseModel,
             summary="获取单个作品数据/Get single video data")
 async def fetch_one_video(request: Request,
-                            itemId: str = Query(example="7339393672959757570", description="作品id/Video id")):
+                          itemId: str = Query(example="7339393672959757570", description="作品id/Video id")):
     """
     # [中文]
     ### 用途:
@@ -56,7 +56,7 @@ async def fetch_one_video(request: Request,
             summary="获取用户的个人信息/Get user profile")
 async def fetch_user_profile(request: Request,
                              uniqueId: str = Query(default="tiktok", description="用户uniqueId/User uniqueId"),
-                             secUid: str = Query(default="", description="用户secUid/User secUid"),):
+                             secUid: str = Query(default="", description="用户secUid/User secUid"), ):
     """
     # [中文]
     ### 用途:

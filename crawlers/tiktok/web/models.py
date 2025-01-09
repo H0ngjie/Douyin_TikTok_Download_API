@@ -86,6 +86,10 @@ class UserMix(BaseRequestModel):
 class PostDetail(BaseRequestModel):
     itemId: str
 
+class SearchUser(BaseRequestModel):
+    keyword: str
+    count: int = 20
+    offset: int = 0
 
 class PostComment(BaseRequestModel):
     aweme_id: str
